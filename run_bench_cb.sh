@@ -3,11 +3,14 @@ PRINT_USAGE="Usage: $0 -n count"
 COUNT=1
 options=""
 
-while getopts "n:" opt
+while getopts "n:o:" opt
 do
   case $opt in
     n)
       COUNT=$OPTARG
+      ;;
+    o)
+      options="$options -o $OPTARG"
       ;;
     \?)
       print_usage
@@ -18,7 +21,7 @@ done
 shift $((OPTIND -1))
 
 if [ "$COUNT" -gt 1 ]; then
-   options="-m 512"
+   options="$options -m 512"
 fi
 
 for n in $(seq 1 $COUNT); do
