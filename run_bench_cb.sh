@@ -1,6 +1,7 @@
 #!/bin/sh
 PRINT_USAGE="Usage: $0 -n count"
 COUNT=1
+DATE=$(date +%m%d%y_%H%M)
 options=""
 
 while getopts "n:o:" opt
@@ -26,6 +27,10 @@ fi
 
 for n in $(seq 1 $COUNT); do
   [ ! -d $HOME/output${n} ] && mkdir $HOME/output${n}
+done
+
+for n in $(seq 1 $COUNT); do
+  [ -d $HOME/output${n} ] && mv $HOME/output${n} $HOME/output${n}.$DATE
 done
 
 for n in $(seq 1 $COUNT); do
