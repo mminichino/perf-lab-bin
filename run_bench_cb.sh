@@ -2,9 +2,11 @@
 PRINT_USAGE="Usage: $0 -n count"
 COUNT=1
 DATE=$(date +%m%d%y_%H%M)
+CONTAINER="cbperf"
+SHELL=0
 options=""
 
-while getopts "n:o:" opt
+while getopts "n:o:c:s" opt
 do
   case $opt in
     n)
@@ -12,6 +14,12 @@ do
       ;;
     o)
       options="$options -o $OPTARG"
+      ;;
+    c)
+      CONTAINER=$OPTARG
+      ;;
+    s)
+      SHELL=1
       ;;
     \?)
       print_usage
@@ -35,5 +43,9 @@ done
 
 for n in $(seq 1 $COUNT); do
   [ -n "$(docker ps -q -a -f name=ycsb${n})" ] && docker rm ycsb${n}
-  docker run -d -v $HOME/output${n}:/output --network host --name ycsb${n} mminichino/ycsb /bench/bin/run_cb.sh -b ycsb${n} $options $@
+  if [ "$SHELL" -eq 0 ]; then
+    docker run -d -v $HOME/output${n}:/output --network host --name ycsb${n} mminichino/${CONTAINER} /bench/bin/run_cb.sh -b ycsb${n} $options $@
+  else
+    docker run -it -v $HOME/output${n}:/output --network host --name ycsb${n} mminichino/${CONTAINER} bash
+  fi
 done
