@@ -34,5 +34,6 @@ for n in $(seq 1 $COUNT); do
 done
 
 for n in $(seq 1 $COUNT); do
-  docker run -d -v $HOME/output${n}:/output --network host mminichino/ycsb /bench/bin/run_cb.sh -b ycsb${n} $options $@
+  [ -n "$(docker ps -q -a -f name=ycsb${n})" ] && docker rm ycsb${n}
+  docker run -d -v $HOME/output${n}:/output --network host --name ycsb${n} mminichino/ycsb /bench/bin/run_cb.sh -b ycsb${n} $options $@
 done
