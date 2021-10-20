@@ -6,7 +6,7 @@ CONTAINER="cbperf"
 SHELL=0
 options=""
 
-while getopts "n:o:c:s" opt
+while getopts "n:o:c:u:p:s" opt
 do
   case $opt in
     n)
@@ -17,6 +17,12 @@ do
       ;;
     c)
       CONTAINER=$OPTARG
+      ;;
+    u)
+      options="$options -u $OPTARG"
+      ;;
+    p)
+      options="$options -p $OPTARG"
       ;;
     s)
       SHELL=1
