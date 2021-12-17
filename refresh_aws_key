@@ -32,6 +32,6 @@ unset AWS_SECRET_ACCESS_KEY
 unset AWS_DEFAULT_REGION
 
 aws sts get-session-token --serial-number "$USER_ARN" --token-code "$TOKEN_CODE" > $HOME/.aws/aws-session-token.json
-jq ".Credentials.Region = \"us-east-2\"" $HOME/.aws/aws-session-token.json > $HOME/.aws/aws-session-token.json.temp
+jq ".Credentials.Region = \"$REGION\"" $HOME/.aws/aws-session-token.json > $HOME/.aws/aws-session-token.json.temp
 mv $HOME/.aws/aws-session-token.json.temp $HOME/.aws/aws-session-token.json
 chmod 600 $HOME/.aws/aws-session-token.json
